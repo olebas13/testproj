@@ -4,6 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class SignUpPage {
 
     WebDriver driver;
@@ -24,6 +26,7 @@ public class SignUpPage {
     private By shareCheckbox = By.cssSelector("input#register-thirdparty");
     private By registerButton = By.cssSelector("a#register-button-email-submit");
     private String errorByText = "//label[@class='has-error' and text()='%s']";
+    By errorLabel = By.xpath("//label[@class='has-error' and string-length(text())>0]");
 
 
     public SignUpPage typeEmail(String email) {
@@ -79,5 +82,17 @@ public class SignUpPage {
         driver.findElement(registerButton).click();
     }
 
+    public List<WebElement> getErrors() {
+        return driver.findElements(errorLabel);
+    }
+
+    public String getErrorByNumber(int number) {
+        return getErrors().get(number - 1).getText();
+    }
+
+    public boolean isErrorVisible(String message) {
+        return driver.findElements(By.xpath(String.format(errorByText, message))).size() > 0
+                && driver.findElements(By.xpath(String.format(errorByText, message))).get(0).isDisplayed();
+    }
 
 }
