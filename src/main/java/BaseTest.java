@@ -1,25 +1,14 @@
-import org.junit.After;
-import org.junit.Before;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.junit.BeforeClass;
 
-import java.util.concurrent.TimeUnit;
+import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Configuration.browser;
 
 public class BaseTest {
 
-    WebDriver driver = new ChromeDriver();
-
-    @Before
-    public void setUp() {
-        System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "/src/main/resources/drivers/chromedriver");
-
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.get("https://www.spotify.com/int/signup");
-    }
-
-    @After
-    public void tearDown() {
-        driver.quit();
+    @BeforeClass
+    public static void setUp() {
+//        System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "/src/main/resources/drivers/chromedriver");
+        baseUrl = "https://www.spotify.com";
+        browser = "firefox";
     }
 }

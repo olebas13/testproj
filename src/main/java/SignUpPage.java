@@ -1,18 +1,14 @@
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static java.lang.String.*;
 
 public class SignUpPage {
-
-    WebDriver driver;
-
-    public SignUpPage(WebDriver driver) {
-        this.driver = driver;
-    }
 
     private By emailField = By.cssSelector("#register-email");
     private By confirmEmailField = By.cssSelector("#register-confirm-email");
@@ -22,77 +18,76 @@ public class SignUpPage {
     private String monthDropDownOption = "//select[@id='register-dob-month']/option[text()='%s']";
     private By dayField = By.cssSelector("#register-dob-day");
     private By yearField = By.cssSelector("#register-dob-year");
-    private String sexRadioButton = "//li[@id='li-gender']/label[normalize-space()='%s']";
+    private String sexRadioButton = "//li[@id='li-gender']//label[normalize-space()='Male']/input";
     private By shareCheckbox = By.cssSelector("#register-thirdparty");
     private By registerButton = By.cssSelector("a#register-button-email-submit");
     private String errorByText = "//label[@class=\"has-error\" and text()=\"%s\"]";
     By errorLabel = By.xpath("//label[@class='has-error' and string-length(text())>0]");
 
+    public SignUpPage open() {
+        Selenide.open("/int/signup");
+        return this;
+    }
 
     public SignUpPage typeEmail(String email) {
-        driver.findElement(emailField).sendKeys(email);
+        $(emailField).setValue(email);
         return this;
     }
 
     public SignUpPage typeConfirmEmail(String confirmEmail) {
-        driver.findElement(confirmEmailField).sendKeys(confirmEmail);
+        $(confirmEmailField).setValue(confirmEmail);
         return this;
     }
 
     public SignUpPage typePassword(String password) {
-        driver.findElement(passwordField).sendKeys(password);
+        $(passwordField).setValue(password);
         return this;
     }
 
     public SignUpPage typeName(String name) {
-        driver.findElement(nameField).sendKeys(name);
+        $(nameField).setValue(name);
         return this;
     }
 
     public SignUpPage setMonth(String month) {
-        driver.findElement(monthDropDown).click();
-        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(monthDropDownOption, month)))).click();
+        $(monthDropDown).selectOption(month);
         return this;
     }
 
     public SignUpPage typeDay(String day) {
-        driver.findElement(dayField).sendKeys(day);
+        $(dayField).setValue(day);
         return this;
     }
 
     public SignUpPage typeYear(String year) {
-        driver.findElement(yearField).sendKeys(year);
+        $(yearField).setValue(year);
         return this;
     }
 
     public SignUpPage setSex(String value) {
-        driver.findElement(By.xpath(String.format(sexRadioButton, value))).click();
+        $(By.xpath(format(sexRadioButton, value))).click();
         return this;
     }
 
     public SignUpPage setShare(boolean value) {
-        WebElement checkbox = driver.findElement(shareCheckbox);
-        if (!checkbox.isSelected() == value) {
-            checkbox.click();
-        }
+        $(shareCheckbox).setSelected(value);
         return this;
     }
 
     public void clickSignUpButton() {
-        driver.findElement(registerButton).click();
+        $(registerButton).click();
     }
 
-    public List<WebElement> getErrors() {
-        return driver.findElements(errorLabel);
+    public ElementsCollection getErrors() {
+        return $$(errorLabel);
     }
 
-    public String getErrorByNumber(int number) {
-        return getErrors().get(number - 1).getText();
+    public SelenideElement getErrorByNumber(int number) {
+        return getErrors().get(number - 1);
     }
 
-    public boolean isErrorVisible(String message) {
-        return driver.findElements(By.xpath(String.format(errorByText, message))).size() > 0
-                && driver.findElements(By.xpath(String.format(errorByText, message))).get(0).isDisplayed();
+    public SelenideElement getError(String message) {
+        return $(By.xpath(format(errorByText, message)));
     }
 
 }

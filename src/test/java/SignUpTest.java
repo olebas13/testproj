@@ -1,45 +1,51 @@
-import org.junit.Assert;
 import org.junit.Test;
+
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 
 public class SignUpTest extends BaseTest {
 
-    SignUpPage page = new SignUpPage(driver);
+    SignUpPage page = new SignUpPage();
 
     @Test
     public void typeInvalidYear() {
         page
+                .open()
                 .setMonth("May")
                 .typeDay("20")
                 .typeYear("84")
                 .setShare(true);
-
-        Assert.assertTrue(page.isErrorVisible("Please enter a valid year."));
-        Assert.assertFalse(page.isErrorVisible("When were you born?"));
+        page.getError("Please enter a valid year.").shouldBe(visible);
+        page.getError("When were you born.").shouldNotBe(visible);
     }
 
     @Test
     public void typeInvalidEmail() {
         page
+                .open()
                 .typeEmail("test@mail.test")
                 .typeConfirmEmail("wrong@mail.test")
                 .typeName("TestName")
                 .clickSignUpButton();
-        Assert.assertTrue(page.isErrorVisible("Email address doesn't match."));
+        page.getError("Email address doesn't match.").shouldBe(visible);
     }
 
     @Test
     public void signUpWithEmptyPassword() {
         page
+                .open()
                 .typeEmail("test@mail.test")
                 .typeConfirmEmail("test@mail.test")
                 .typeName("TestName")
                 .clickSignUpButton();
-        Assert.assertTrue(page.isErrorVisible("Please choose a password."));
+        page.getError("Please choose a password.").shouldBe(visible);
     }
 
     @Test
     public void typeInvalidValues() {
         page
+                .open()
                 .typeEmail("rghsdfg")
                 .typeConfirmEmail("wrong@test.mail")
                 .typePassword("1234/-/-")
@@ -47,7 +53,7 @@ public class SignUpTest extends BaseTest {
                 .setSex("Male")
                 .setShare(false)
                 .clickSignUpButton();
-        Assert.assertEquals(6, page.getErrors().size());
-        Assert.assertEquals("Please enter your birth month.", page.getErrorByNumber(3));
+        page.getErrors().shouldHave(size(6));
+        page.getErrorByNumber(3).shouldHave(text("Please enter your birth month."));
     }
 }
