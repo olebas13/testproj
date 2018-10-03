@@ -14,18 +14,18 @@ public class SignUpPage {
         this.driver = driver;
     }
 
-    private By emailField = By.cssSelector("input#register-email");
-    private By confirmEmailField = By.cssSelector("input#register-confirm-email");
-    private By passwordField = By.cssSelector("input#register-password");
-    private By nameField = By.cssSelector("input#regisrer-displayname");
-    private By monthDropDown = By.cssSelector("select#register-dob-month");
+    private By emailField = By.cssSelector("#register-email");
+    private By confirmEmailField = By.cssSelector("#register-confirm-email");
+    private By passwordField = By.cssSelector("#register-password");
+    private By nameField = By.cssSelector("#register-displayname");
+    private By monthDropDown = By.cssSelector("#register-dob-month");
     private String monthDropDownOption = "//select[@id='register-dob-month']/option[text()='%s']";
-    private By dayField = By.cssSelector("input#register-dob-day");
-    private By yearField = By.cssSelector("input#register-dob-year");
-    private String sexRadioButton = "//li[@id='li-gender']/label[normalize-space()='$s']";
-    private By shareCheckbox = By.cssSelector("input#register-thirdparty");
+    private By dayField = By.cssSelector("#register-dob-day");
+    private By yearField = By.cssSelector("#register-dob-year");
+    private String sexRadioButton = "//li[@id='li-gender']/label[normalize-space()='%s']";
+    private By shareCheckbox = By.cssSelector("#register-thirdparty");
     private By registerButton = By.cssSelector("a#register-button-email-submit");
-    private String errorByText = "//label[@class='has-error' and text()='%s']";
+    private String errorByText = "//label[@class=\"has-error\" and text()=\"%s\"]";
     By errorLabel = By.xpath("//label[@class='has-error' and string-length(text())>0]");
 
 

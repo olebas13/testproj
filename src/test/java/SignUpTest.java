@@ -1,29 +1,53 @@
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.concurrent.TimeUnit;
+public class SignUpTest extends BaseTest {
 
-public class SignUpTest {
+    SignUpPage page = new SignUpPage(driver);
 
-    WebDriver driver;
-    SignUpPage page;
+    @Test
+    public void typeInvalidYear() {
+        page
+                .setMonth("May")
+                .typeDay("20")
+                .typeYear("84")
+                .setShare(true);
 
-    @Before
-    public void setUp() {
-        System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "/src/main/resources/drivers/geckodriver");
-        driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.get("https://www.spotify.com/int/signup");
+        Assert.assertTrue(page.isErrorVisible("Please enter a valid year."));
+        Assert.assertFalse(page.isErrorVisible("When were you born?"));
     }
 
     @Test
+    public void typeInvalidEmail() {
+        page
+                .typeEmail("test@mail.test")
+                .typeConfirmEmail("wrong@mail.test")
+                .typeName("TestName")
+                .clickSignUpButton();
+        Assert.assertTrue(page.isErrorVisible("Email address doesn't match."));
+    }
 
+    @Test
+    public void signUpWithEmptyPassword() {
+        page
+                .typeEmail("test@mail.test")
+                .typeConfirmEmail("test@mail.test")
+                .typeName("TestName")
+                .clickSignUpButton();
+        Assert.assertTrue(page.isErrorVisible("Please choose a password."));
+    }
 
-    @After
-    public void tearDown() {
-        driver.quit();
+    @Test
+    public void typeInvalidValues() {
+        page
+                .typeEmail("rghsdfg")
+                .typeConfirmEmail("wrong@test.mail")
+                .typePassword("1234/-/-")
+                .typeName("Name")
+                .setSex("Male")
+                .setShare(false)
+                .clickSignUpButton();
+        Assert.assertEquals(6, page.getErrors().size());
+        Assert.assertEquals("Please enter your birth month.", page.getErrorByNumber(3));
     }
 }
