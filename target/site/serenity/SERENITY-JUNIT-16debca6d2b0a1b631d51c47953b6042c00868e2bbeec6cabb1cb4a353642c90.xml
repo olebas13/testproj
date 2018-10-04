@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="WhenSignUp" skipped="0" tests="4" time="84.68" timestamp="2018-10-04 12:47:32"><testcase classname="WhenSignUp" name="Type invalid values"/><testcase classname="WhenSignUp" name="Sign up with empty password"/><testcase classname="WhenSignUp" name="Type invalid email"/><testcase classname="WhenSignUp" name="Type invalid year"><failure message="[User should see message, but he doesn't] &#10;Expecting:&#10; &lt;false&gt;&#10;to be equal to:&#10; &lt;true&gt;&#10;but was not." type="org.opentest4j.AssertionFailedError">[User should see message, but he doesn't] 
+Expecting:
+ &lt;false&gt;
+to be equal to:
+ &lt;true&gt;
+but was not.</failure><system-err>[User should see message, but he doesn't] 
+Expecting:
+ &lt;false&gt;
+to be equal to:
+ &lt;true&gt;
+but was not.
+steps.SignUpSteps.should_see_error(SignUpSteps.java:69)
+WhenSignUp.typeInvalidYear(WhenSignUp.java:26)
+</system-err></testcase></testsuite>
